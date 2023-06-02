@@ -1,0 +1,29 @@
+.product-container {
+    width: 80%;
+    margin: 0 auto;
+    padding: 50px;
+}
+
+.product-card {
+    padding: 10px;
+    padding-bottom: 30px;
+    background-color: #d6d6d6;
+    margin-bottom: 10px;
+    border-radius: 5px;
+   
+}
+
+.topline {
+    display: flex;
+    justify-content: space-between;
+}
+
+.prod-price {
+    /* font-weight: 700; */
+    font-size: 20px;
+}
+
+.prod-category {
+    font-size: 12px;
+    color: #8b8b8b;
+}
