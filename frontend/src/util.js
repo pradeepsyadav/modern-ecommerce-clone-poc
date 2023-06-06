@@ -1,5 +1,18 @@
 export const API_ENDPOINT = 'http://localhost:8000/'
+const CONSUMER_ROUTE = 'api/auth/consumer';
+const SELLER_ROUTE = 'api/auth/seller';
 
+let route;
+
+const selection = {
+    'CONSUMER': CONSUMER_ROUTE,
+    'SELLER': SELLER_ROUTE
+}
+
+export const selectRoute = function(r) {
+    if(Object.keys(selection).filter(k => r===k).length === 0) throw new Error('Invalid route selection !')
+    route = selection[r];
+}
 
 export async function getPublic(url, query=null) {
     const Response = await fetch(API_ENDPOINT.concat('api/public').concat(url).concat(query !== null ? getQueryString(query) : ''), {
@@ -21,7 +34,7 @@ export async function postPublic(url, body) {
 }
 
 export async function getAuthenticatedConsumer(url, token, query=null) {
-    const Response = await fetch(API_ENDPOINT.concat('api/auth/consumer').concat(url).concat(query !== null ? getQueryString(query) : ''), {
+    const Response = await fetch(API_ENDPOINT.concat(route).concat(url).concat(query !== null ? getQueryString(query) : ''), {
         method: "GET",
         headers: {
             "JWT": token
@@ -31,7 +44,7 @@ export async function getAuthenticatedConsumer(url, token, query=null) {
 }
 
 export async function postAuthenticatedConsumer(url, token, body) {
-    const Response = await fetch(API_ENDPOINT.concat('api/auth/consumer').concat(url), {
+    const Response = await fetch(API_ENDPOINT.concat(route).concat(url), {
         method: "POST",
         headers: {
             "JWT": token,
@@ -44,7 +57,7 @@ export async function postAuthenticatedConsumer(url, token, body) {
 }
 
 export async function putAuthenticatedConsumer(url, token, body) {
-    const Response = await fetch(API_ENDPOINT.concat('api/auth/consumer').concat(url), {
+    const Response = await fetch(API_ENDPOINT.concat(route).concat(url), {
         method: "PUT",
         headers: {
             "JWT": token,
@@ -57,7 +70,7 @@ export async function putAuthenticatedConsumer(url, token, body) {
 }
 
 export async function deleteAuthenticatedConsumer(url, token, body) {
-    const Response = await fetch(API_ENDPOINT.concat('api/auth/consumer').concat(url), {
+    const Response = await fetch(API_ENDPOINT.concat(route).concat(url), {
         method: "delete",
         headers: {
             "JWT": token,

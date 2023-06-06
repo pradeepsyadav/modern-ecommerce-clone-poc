@@ -9,9 +9,9 @@ function ProductList() {
     const [products, setProducts] = useRecoilState(productAtom)
 
     useEffect(() => {
-        if(products) return;
+        if (products) return;
         async function fetchData() {
-            const res = await getPublic("/product/search", {keyword : ''})
+            const res = await getPublic("/product/search", { keyword: '' })
             const js = await res.json()
             setProducts(js)
         }
@@ -19,17 +19,19 @@ function ProductList() {
     }, [])
 
     function calculateRender() {
-        if(!products) return null;
-        else if(products.length === 0) return 'No Products found';
+        if (!products) return null;
+        else if (products.length === 0) return 'No Products found';
         else return products.map(p => <ProductCard key={p.productId} product={p} />)
     }
 
     return (
-        <div className="product-container">
-            {/* {products && products.map(p => <ProductCard key={p.productId} product={p} />)}
+        <> {(products && products.length !== 0) && <div className="product-header">All Products</div>}
+            <div className="product-container">
+                {/* {products && products.map(p => <ProductCard key={p.productId} product={p} />)}
             {(products.length === 0) ? 'No Products found' : } */}
-            {calculateRender()}
-        </div>
+                {calculateRender()}
+            </div>
+        </>
     );
 }
 

@@ -7,6 +7,14 @@
     justify-content: space-between;
 }
 
+.product-header {
+    width: 80%;
+    margin: 0 auto;
+    padding-top: 27px;
+    text-align: center;
+    font-size: 30px;
+}
+
 .product-card {
     padding: 10px;
     padding-bottom: 30px;
@@ -19,6 +27,7 @@
 .topline {
     display: flex;
     justify-content: space-between;
+    padding-top: 5px;
 }
 
 .prod-name {
