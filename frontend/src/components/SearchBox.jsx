@@ -1,55 +1,43 @@
 import { useState } from 'react';
 import '../styles/search.css'
+import { useRecoilState, useSetRecoilState } from 'recoil';
+import { productAtom, viewAtom } from '../store/atoms';
 import { getPublic } from '../util';
-import { useCustomState } from '../store';
 
-function SearchBox({ handleSetProduct }) {
+function SearchBox() {
 
     const [keyword, setKeyword] = useState('');
-    // const [val, dispatch] = useCustomState()
+    const setView = useSetRecoilState(viewAtom)
+    const [products, setProducts] = useRecoilState(productAtom)
 
-    async function searchProduct() {
+    async function searchProduct(e) {
+        e.preventDefault();
         let js;
-        // const res = await getPublic('/product/search', { "keyword": keyword })
-        // if (res.status === 200) {
-        //     js = await res.json()
-        //     console.log(js);
-        // } else {
-        //     console.log("Some error happened");
-        // }
-        // setter(js)
-        // onView(true)
-        handleSetProduct([
-            {
-                "productId": 1,
-                "productName": "Apple iPad 10.2 8th Gen WiFi iOS Tablet",
-                "price": 29190.0,
-                "category": {
-                    "categoryName": "Electronics"
-                }
-            },
-            {
-                "productId": 2,
-                "productName": "Crocin pain relief tablet",
-                "price": 10.0,
-                "category": {
-                    "categoryName": "Medicines"
-                }
-            }
-        ])
-
+        const res = await getPublic('/product/search', { "keyword": keyword })
+        if (res.status === 200) {
+            js = await res.json()
+            setProducts(js)
+        } else {
+            setProducts(null)
+        }
+        setView('PRODUCT_VIEW')
+        setKeyword('')
+        
     }
     return (
-        <div className="search">
+
+        <form onSubmit={searchProduct} className="search">
             <input type="text" className="searchTerm"
-                placeholder="What are you looking for?"
+                placeholder="Search Products.."
                 onChange={e => setKeyword(e.target.value)}
                 value={keyword}
+                required={true}
             />
-            <button type="submit" className="searchButton" onClick={searchProduct}>
+            <button type="submit" className="searchButton">
                 <span className="fa fa-search">Search</span>
             </button>
-        </div>
+        </form>
+
     );
 }
 

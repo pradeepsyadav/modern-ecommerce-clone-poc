@@ -1,20 +1,35 @@
 import { useState } from 'react';
 import '../styles/login.css'
 import { getPublic, postPublic } from '../util';
+import { useRecoilState, useSetRecoilState } from 'recoil';
+import { cartAtom, errorsAtom, userAtom, viewAtom } from '../store/atoms';
 
-function Login({setToken, setCurrUser}) {
+
+function Login() {
 
     const [user, setUser] = useState('');
     const [pass, setPass] = useState('');
 
-    async function login() {
-        const resp = await postPublic('/login', {
-            "username": user,
-            "password": pass
-        });
-        const userModel = await resp.json()
-        // setToken(tex)
-        setCurrUser(userModel)
+    const [userVal, setuserVal] = useRecoilState(userAtom)
+    const setView = useSetRecoilState(viewAtom)
+    const [cart, setter] = useRecoilState(cartAtom)
+    const [errors, setErrors] = useRecoilState(errorsAtom)
+
+    async function login(e) {
+        e.preventDefault()
+        try {
+            const resp = await postPublic('/login', {
+                "username": user,
+                "password": pass
+            });
+            if(resp.status !== 200) throw new Error("Invalid username and password combination!")
+            const userModel = await resp.json()
+            setuserVal(userModel)
+            setView('PRODUCT_VIEW')
+        } catch (error) {
+            console.log(error.message);
+            setErrors({message: error.message})
+        }
     }
 
     // {
@@ -44,7 +59,7 @@ function Login({setToken, setCurrUser}) {
                 <form className="form1">
                     <input className="un" type="text" align="center" placeholder="Username" onChange={e => setUser(e.target.value)}/>
                     <input className="pass" type="password" align="center" placeholder="Password" onChange={e => setPass(e.target.value)}/>
-                    <a className="submit" align="center" onClick={login}>Sign in</a>
+                    <button type='Submit' className="submit" align="center" onClick={login}>Sign in</button>
                     <p className="forgot" align="center"><a href="#">Forgot Password?</a></p>
                 </form>
             </div>
