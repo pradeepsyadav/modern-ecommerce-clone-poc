@@ -31,3 +31,7 @@ export const errorsAtom = atom({
         message: ''
     }
 })
+
+function evaluateIfUserExistsLocally() {
+    const us = localStorage.getItem('');
+}

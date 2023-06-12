@@ -13,7 +13,7 @@
 .route-container .button {
     display: block;
     width: 300px;
-    height: 70px;
+    /* height: 70px; */
     border-radius: 4px;
     background-color: #740d93;
     border: none;

@@ -1,4 +1,4 @@
-import { useRecoilValue } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import { userAtom } from "../store/atoms";
 import { deleteAuthenticatedConsumer, getAuthenticatedConsumer, postAuthenticatedConsumer, putAuthenticatedConsumer, selectRoute } from "../util";
 
@@ -14,23 +14,37 @@ const bodiful = ['POST', 'PUT', 'DELETE']
 
 export const useAuthenticatedFetch = () => {
     selectRoute('CONSUMER')
-    return commonFunction();
+    const localUser = localStorage.getItem('consumer_jwt')
+    return commonFunction(localUser);
 }
 
 export const useAuthenticatedSellerFetch = () => {
     selectRoute('SELLER')
-    return commonFunction();
+    const localUser = localStorage.getItem('seller_jwt')
+    return commonFunction(localUser);
 }
 
-function commonFunction() {
-    const user = useRecoilValue(userAtom);
+function commonFunction(localUser) {
+    const [user, setUser] = useRecoilState(userAtom);
 
     async function fetch(url, method, body) {
 
-        if (!user) {
+        if (!user 
+            )
+            // && !localUser
+            // ) 
+        {
             throw new Error("Please Login to perform this action");
         }
-        const jwt = user.jwtToken;
+
+        let jwt;
+
+        // if (localUser) {
+        //     const umodel = JSON.parse(localUser)
+        //     jwt = umodel.jwtToken;
+        // }
+
+        jwt = user.jwtToken;
         let isBody = false;
 
         isBody = bodiful.filter(met => met === method).length > 0;

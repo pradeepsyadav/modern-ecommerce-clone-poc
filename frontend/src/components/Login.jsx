@@ -3,9 +3,10 @@ import '../styles/login.css'
 import { getPublic, postPublic } from '../util';
 import { useRecoilState, useSetRecoilState } from 'recoil';
 import { cartAtom, errorsAtom, userAtom, viewAtom } from '../store/atoms';
+import { useNavigate } from "react-router-dom";
 
 
-function Login() {
+function Login(props) {
 
     const [user, setUser] = useState('');
     const [pass, setPass] = useState('');
@@ -14,6 +15,7 @@ function Login() {
     const setView = useSetRecoilState(viewAtom)
     const [cart, setter] = useRecoilState(cartAtom)
     const [errors, setErrors] = useRecoilState(errorsAtom)
+    const navigate = useNavigate();
 
     async function login(e) {
         e.preventDefault()
@@ -25,7 +27,10 @@ function Login() {
             if(resp.status !== 200) throw new Error("Invalid username and password combination!")
             const userModel = await resp.json()
             setuserVal(userModel)
-            setView('PRODUCT_VIEW')
+            // setView('PRODUCT_VIEW')
+            const isSeller = userModel.user.roles[0] === "SELLER"
+            localStorage.setItem( isSeller ? "seller_jwt" : "consumer_jwt", JSON.stringify(userModel) )
+            navigate(isSeller ? "/seller/products" : "/consumer")
         } catch (error) {
             console.log(error.message);
             setErrors({message: error.message})

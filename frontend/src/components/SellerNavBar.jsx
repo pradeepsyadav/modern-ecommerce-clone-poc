@@ -6,6 +6,7 @@ import { fetchData } from "../util";
 import { useAuthenticatedFetch, useAuthenticatedSellerFetch } from "../hooks/useAuthenticatedFetch";
 import CartButton from "./CartButton";
 import { useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
 
 function SellerNavBar() {
     const [view, setView] = useRecoilState(viewAtom)
@@ -14,6 +15,7 @@ function SellerNavBar() {
     const setProducts = useSetRecoilState(productAtom)
     const { fetch } = useAuthenticatedSellerFetch()
     const [errors, setErrors] = useRecoilState(errorsAtom)
+    const navigate = useNavigate();
 
     // useEffect(() => {
     //     if (!user) return;
@@ -32,6 +34,7 @@ function SellerNavBar() {
 
     function hadleLoginClick() {
         setView('LOGIN')
+        navigate('login')
     }
 
     async function getUserCart() {
@@ -49,16 +52,22 @@ function SellerNavBar() {
     }
 
     async function handleHomeClick() {
-        const d = await fetchData();
-        const res = await fetch("/product", "GET")
-        let js = await res.json()
-        setProducts(js)
-        setView('PRODUCT_VIEW');
+        // const d = await fetchData();
+        // const res = await fetch("/product", "GET")
+        // let js = await res.json()
+        // setProducts(js)
+        // setView('PRODUCT_VIEW');
+        navigate('products')
+    }
+
+    function addProduct() {
+        
     }
 
     return (
         <div className="wrap">
-            <Button value={'Your Products'} clickHandler={handleHomeClick} />
+            <Link to={'products'}><Button value={'Your Products'}/></Link>
+            <Link to={'addProduct'}><Button value={'Add Product'}/></Link>
             {/* <SearchBox /> */}
             {/* <Button value={user ? user.user.username : 'Cart'} clickHandler={handleCartView} /> */}
             {/* <CartButton cart={cart} getUserCart={getUserCart} /> */}
